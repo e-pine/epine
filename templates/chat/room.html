@@ -1,0 +1,135 @@
+{% extends 'home.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+  <div class="container px-4 px-lg-5">
+      <a href="{% url 'index' %}" class="brand-link">
+          <img src="{% static 'dist/img/default-monochrome.svg' %}" alt="AdminLTE Logo" style="opacity: .8; width: 100px; height: 30px;">
+        </a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+          <!-- <ul class="navbar-nav ms-auto my-2 my-lg-0">
+              <li class="nav-item dropdown">
+                  <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Message
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for room in rooms %}
+                    <a href="{% url 'room' room.slug %}" class="dropdown-item">{{room.name}}</a>
+                    {% endfor %}
+                  </div>
+                </li>
+              
+          </ul> -->
+      </div>
+  </div>
+</nav>
+{% endblock navbar %}
+{% block content %}
+<div class="masthead login-page">
+  <div class="" style="width: 50%;">
+    <div class="row justify-content-center">
+        <div class="container-lg mx-4 mt-4">
+            <div class="card p-4 rounded-x1 bg-light">
+              <div class="float-right">
+                <a href="{% url 'index' %}">
+                  <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </a>
+              </div>
+              <div class="dropdown-divider"></div>
+              <div class="">
+                <div class="text-center">
+                  <h1><i class="far fa-comments"></i></h1>
+                  <h3 class="text-dark" style="font-family: Georgia, 'Times New Roman', Times, serif;">{{room.name}}</h3>
+                </div>
+                <div>
+                <div class="dropdown-divider"></div>
+              </div>
+              </div>
+              <div class="chat-messages space-y-3" id="chat-messages">
+                {% for message in messages %}
+                <div class="message-container {% if message.user.username == request.user.username %}sender{% else %}receiver{% endif %}">
+                    {% if message.user != request.user %} 
+                    <p class="font-weight-bold">{{ message.user.username }}</p>
+                    {% else %}
+                    <i class='far fa-user'></i>
+                    {% endif %}
+                    &nbsp;&nbsp;
+                   <div class="message-content rounded p-3 mb-3">
+                        <p>{{ message.content }}</p>
+                        <p class="message-time">{{ message.date_added|hours_ago }}</p>
+                  </div>
+                </div>
+                {% endfor %}
+            </div>
+              <div class="card-footer">
+                <form action="." method="post" class="d-flex">
+                  {% csrf_token %}
+                  <input type="text" name="content" class="form-control flex-grow-1 mr-2" id="chat-message-input" style="background-color: rgb(219, 206, 206);">
+                  <div class="button btn btn-primary px-4" id="chat-message-submit">Send</div>
+              </form>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+{{ room.slug|json_script:"json-roomname" }}
+{{ request.user.username|json_script:"json-username" }}
+
+{% include 'script.html' %}
+</div>
+
+<style>
+.sender .message-content {
+    background-color: #DCF8C6; /* Sender's background color */
+    color: #000;
+}
+
+.receiver .message-content {
+    background-color: #ECE5DD; /* Receiver's background color */
+    color: #000;
+}
+
+.message-container {
+    display: flex;
+    min-height: max-content;
+    justify-content: {% if message.user.username == request.user.username %}flex-end{% else %}flex-start{% endif %};
+}
+
+.sender {
+    flex-direction: row-reverse;
+}
+
+.receiver {
+    flex-direction: row;
+}
+
+.message-content {
+    background-color: {% if message.user.username == request.user.username %}#DCF8C6{% else %}#ECE5DD{% endif %};
+    color: #000;
+    border-radius: 8px;
+    padding: 10px;
+    max-width: 70%; /* Adjust this as needed */
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1); /* Add a shadow for a card-like effect */
+}
+
+.message-content p.font-weight-bold {
+    margin: 0;
+}
+
+.message-time {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #888;
+}
+
+</style>
+
+
+{% endblock content %}

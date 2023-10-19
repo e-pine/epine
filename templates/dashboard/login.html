@@ -1,0 +1,13 @@
+{% extends "account/base.html" %}
+{% load account socialaccount %}
+
+{% block content %}
+<div class="custom-login-page">
+    <h2>Sign In with Google</h2>
+    <form method="post" action="{% url 'socialaccount_login' 'google' %}">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Sign In</button>
+    </form>
+</div>
+{% endblock %}

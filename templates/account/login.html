@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load i18n %}  <!-- Load the i18n template tag library -->
+{% load account socialaccount %}
+{% block title %}
+Login
+{% endblock title %}
+{% block content %}
+<div class="masthead login-page">
+  <div class="login-box" style="width: 400px;">
+    <!-- /.login-logo -->
+    <div class="card card-success">
+      <div class="card-header text-center">
+        <div class="float-right">
+          <a href="{% url 'buy-page' %}">
+            <button type="button" class="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </a>
+        </div>
+        <a href="#" class="h1">Login</a>
+      </div>
+      
+      {% get_providers as socialaccount_providers %}
+
+      {% if socialaccount_providers %}
+      <p>{% blocktrans with site.name as site_name %}Please sign in with one
+      of your existing third party accounts.<br>Or, <a href="{{ signup_url }}">sign up</a>
+      for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+
+      <div class="">
+
+        <div class="socialaccount_providers">
+          {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+        </div>
+
+        <div class="login-or border-top border-bottom my-3">{% trans 'OR' %}</div>
+
+      </div>
+
+      {% include "socialaccount/snippets/login_extra.html" %}
+
+      {% else %}
+      <p>{% blocktrans %}If you have not created an account yet, then please
+      <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+      {% endif %}
+      <div class="card-body">
+        <!-- <p class="login-box-msg">Sign in to start your session</p> -->
+  
+        <form action="" method="post">
+          {% csrf_token %}
+          {% if messages %}
+          <div style="color: rgb(248, 75, 75); font-style: italic; font-size: medium;">
+                <ul class="messages">
+                    {% for message in messages %}
+                        <!-- <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> -->
+                        <strong>{{ message }}</strong>
+                    {% endfor %}
+                </ul>
+          </div>
+          {% endif %}
+          <div class="col-12 input-group mb-3">
+            <input type="text" class="form-control" placeholder="Username" name="username">
+            <div class="input-group-append">
+              <!-- <div class="input-group-text bg-success">
+                <span class="fas fa-envelope"></span>
+              </div> -->
+            </div>
+          </div>
+          <div class="col-12 input-group mb-3">
+            <input type="password" class="form-control" placeholder="Password" name="password">
+            <div class="input-group-append">
+              <!-- <div class="input-group-text bg-success">
+                <span class="fas fa-lock"></span>
+              </div> -->
+            </div>
+          </div>
+          <div class="col-12 mb-4">
+            <button type="submit" class="btn btn-success btn-block">Sign In</button>
+          </div>
+          
+            <div class="col-12" style="text-align: center;">
+              <div class="icheck-primary">
+                <p style="font-size: large;">Don't have an account?<a href="{{ signup_url }}" style="color: rgb(29, 230, 29);">Signup now</a></p>
+              </div>
+            </div>
+        </form>
+  
+        <div class="social-auth-links text-center mt-2 mb-3">
+          <a href="#" class="btn btn-block btn-primary">
+            <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+          </a>
+          <a href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}" class="btn btn-block btn-danger">
+            <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+          </a>
+        </div>
+        <!-- /.social-auth-links -->
+  
+        <p class="mb-1">
+          <a href="forgot-password.html">I forgot my password</a>
+        </p>
+        <p class="mb-0">
+          <a href="{% url 'register' %}" class="text-center">Register a new membership</a>
+        </p>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </div>
+</div>
+{% endblock content %}

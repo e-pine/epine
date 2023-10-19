@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block css %}
+
+{% endblock css %}
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="card card-body">
+                  <h1>Crops</h1>
+                  <table class="table table-bordered table-hover">
+                      <thead>
+                      <tr style="color: #fff; background-color: rgb(63, 121, 83);">
+                        <th>Variety</th>
+                        <th>Plant Date</th>
+                        <th>No. of Planted</th>
+                        <th>Cost</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {% for a in c %}
+                      <tr>
+                        <td>{{a.category}}</td>
+                        <td>{{a.plant_date}}</td>
+                        <td>{{a.number_planted}}</td>
+                        <td>{{a.cost}}</td>
+                      </tr>
+                      {% endfor %}
+                      </tbody>
+                      <tfoot>
+                      </tfoot>
+                    </table>
+                  </div>
+              </div>
+                <!-- Create crop Modal -->
+                <div class="modal fade" id="createCropModal" tabindex="-1" role="dialog" aria-labelledby="createCropModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="createCropModalLabel">Create Crop</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form method="post">
+                        {% csrf_token %}
+                        <div class="card-body mb-1">
+                          {{form}}
+                        </div>
+                        <button type="submit" class="btn btn-primary float-right">Submit</button>
+                        <!-- /.card-body -->
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                </div>
+              
+                <div class="col-sm-6">
+                  <div class="card card-body">
+                    <h1>Yields</h1>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr style="color: #fff; background-color: rgb(63, 121, 83);">
+                          <th>Variety</th>
+                          <th>Harvest Date</th>
+                          <th>No. of Harvest</th>
+                          <th>Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for b in y %}
+                        <tr>
+                          <td>{{b.category}}</td>
+                          <td>{{b.harvest_date}}</td>
+                          <td>{{b.number_yield}}</td>
+                          <td>{{b.value}}</td>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                      </table>
+                    </div>
+                </div>
+                  
+                  
+                      <!-- Main content -->
+                  
+                      <!-- /.content -->
+                  
+                    
+                    <!-- Create Yield Modal -->
+                    <div class="modal fade" id="createCropModal" tabindex="-1" role="dialog" aria-labelledby="createCropModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="createCropModalLabel">Harvest</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form method="post">
+                            {% csrf_token %}
+                            <div class="card-body mb-1">
+                              {{yield_form}}
+                            </div>
+                            <button type="submit" class="btn btn-primary float-right">Submit</button>
+                            <!-- /.card-body -->
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+            </div>
+      </div>
+    </div>
+</div>
+<script>
+  // Add JavaScript to periodically update the notification badge
+  function updateNotificationBadge() {
+      // Make an AJAX request to get the notification count
+      $.get('/get_notification_count/', function(data) {
+          $('#notification-badge').text(data.count);
+      });
+  }
+
+  // Call the function initially and set a timer to periodically update the badge
+  updateNotificationBadge();
+  setInterval(updateNotificationBadge, 60000); // Update every minute
+</script>
+{% endblock content %}

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}Expenses{% endblock title %}
+{% block content %}
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Expenses Details</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+          {% load custom_filters %}
+          <div class="card card-body">
+            <!-- Display Hawaii Crop Expenses -->
+
+            <h2>Cost For Crops</h2>
+            <p>Total Planted: {{ total_planted|format_number }}</p>
+            <p>Pine Price: {{ haw_pine_price }}</p>
+            <p>Cost: {{ cost|format_number }}</p>
+            <table class="table table-bordered table-hover">
+                <thead>
+                  <t class="bg-success p-2" style="font-family: Tahoma;"><h5>Hawaii Crop Expenses</h5></tr>
+                  <tr class="bg-light">
+                        <th>Plant Date</th>
+                        <th>Total Planted</th>
+                        <th>Expense</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in hawaii_crops %}
+                        <tr>
+                            <td>{{ item.plant_date }}</td>
+                            <td>{{ item.total_planted|format_number }}</td>
+                            <td>{{ item.expense|format_number }}</td>
+                        </tr>
+                    {% endfor %}
+                        <tr>
+                          <td><strong>Total Hawaii Crop Expense</strong></td>
+                          <td></td>
+                          <td><strong style="color: red;">{{ total_expense_hawaii|format_number }}</strong></td>
+                        </tr>
+                </tbody>
+            </table>
+            <br><br>
+            <table class="table table-bordered table-hover">
+                <thead>
+                  <t class="bg-success p-2" style="font-family: Tahoma;"><h5>Pormosa Crop Expenses</h5></tr>
+                  <tr class="bg-light">
+                        <th>Plant Date</th>
+                        <th>Total Planted</th>
+                        <th>Expense</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in pormosa_crops %}
+                        <tr>
+                            <td>{{ item.plant_date }}</td>
+                            <td>{{ item.total_planted|format_number }}</td>
+                            <td>{{ item.expense|format_number }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                      <td><strong>Total Pormosa Crop Expense</strong></td>
+                      <td></td>
+                      <td><strong style="color: red;">{{ total_expense_pormosa|format_number }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr class="bg-success p-2">
+                  <th>NAME</th>
+                  <th>Price</th>
+                  <th>DATE</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for work_pay in wp %}
+                <tr>
+                  <td>{{ work_pay.name }}</td>
+                  <td>{{ work_pay.price_pay }}</td>
+                  <td>{{ work_pay.date }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        
+            <h2>Total Expenses</h2>
+            <p>Total Stock Costs: {{ overall_total_cost|format_number }}</p>
+            <p>Total Expenses (including stock costs): {{ total_expenses|format_number }}</p>
+
+          </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
